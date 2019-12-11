@@ -1,44 +1,36 @@
 
-%% µ¼Èëµç×Ó±í¸ñÖĞµÄÊı¾İ
-% ÓÃÓÚ´ÓÒÔÏÂµç×Ó±í¸ñµ¼ÈëÊı¾İµÄ½Å±¾:
-%
-%    ¹¤×÷²¾: C:\Users\liuji\OneDrive\Documents\University\EEE117\Inverstigation of passive network circuits\ac - 2.0.xlsx
-%    ¹¤×÷±í: Sheet1
-%
-% ÓÉ MATLAB ÓÚ 2019-12-11 06:13:08 ×Ô¶¯Éú³É
-
-%% ÉèÖÃµ¼ÈëÑ¡Ïî²¢µ¼ÈëÊı¾İ
+%% è®¾ç½®å¯¼å…¥é€‰é¡¹å¹¶å¯¼å…¥æ•°æ®
 opts = spreadsheetImportOptions("NumVariables", 4);
 
-% Ö¸¶¨¹¤×÷±íºÍ·¶Î§
+% æŒ‡å®šå·¥ä½œè¡¨å’ŒèŒƒå›´
 opts.Sheet = "Sheet1";
 opts.DataRange = "A1:D11";
 
-% Ö¸¶¨ÁĞÃû³ÆºÍÀàĞÍ
+% æŒ‡å®šåˆ—åç§°å’Œç±»å‹
 opts.VariableNames = ["Freq", "Var2", "Var3", "Gain"];
 opts.SelectedVariableNames = ["Freq", "Gain"];
 opts.VariableTypes = ["double", "char", "char", "double"];
 
-% Ö¸¶¨±äÁ¿ÊôĞÔ
+% æŒ‡å®šå˜é‡å±æ€§
 opts = setvaropts(opts, ["Var2", "Var3"], "WhitespaceRule", "preserve");
 opts = setvaropts(opts, ["Var2", "Var3"], "EmptyFieldRule", "auto");
 
-% µ¼ÈëÊı¾İ
-ac2 = readtable("C:\Users\liuji\OneDrive\Documents\University\EEE117\Inverstigation of passive network circuits\ac - 2.0.xlsx", opts, "UseExcel", false);
+% å¯¼å…¥æ•°æ®
+ac2 = readtable("Place ur location here", opts, "UseExcel", false);
 
 
-% Çå³ıÁÙÊ±±äÁ¿
+% æ¸…é™¤ä¸´æ—¶å˜é‡
 clear opts
 
-%% ´¦ÀíÊı¾İ
-%³õÊ¼»¯ÊıÖµ
+%% å¤„ç†æ•°æ®
+%åˆå§‹åŒ–æ•°å€¼
 r = 100
 l = 4.7*(10^-3);
 c = 0.01*(10^-6);
 freq =1000:0.0001:100000;
 %freq = ac2.Freq * 1000;
 
-%³õ²½ÔËËã
+%åˆæ­¥è¿ç®—
 r2 = r^2;
 omg = 2*pi*freq;
 reactl = omg*l;
@@ -46,58 +38,58 @@ reactc = omg*c;
 invreactc = 1./reactc;
 react = (reactl-invreactc).^2;
 
-%¼ÆËã×Üµç¸Ğ
+%è®¡ç®—æ€»ç”µæ„Ÿ
 z = (r2+react).^0.5;
 invreactz = 1./z;
 
-%¼ÆËãÔöÇ¿
+%è®¡ç®—å¢å¼º
 Gain = 20*log10(r * invreactz);
 [Gmax,Nmax] = max(Gain)
 [~,Gresonant] = min(abs(Gain--3))
 f0=1/(2*pi*(l*c)^0.5)
-% Çå³ıÁÙÊ±±äÁ¿
+% æ¸…é™¤ä¸´æ—¶å˜é‡
 clear r l c v r2 omg reactl reactc invreactc react z invreactz;
-%% ´´½¨Í¼±í
-% ´´½¨ figure
+%% åˆ›å»ºå›¾è¡¨
+% åˆ›å»º figure
 figure1 = figure;
 
-%% Ê¹ÓÃÆ®È»ÈáË³
+%% ä½¿ç”¨é£˜ç„¶æŸ”é¡º
 %a = polyfit(ac2.Freq,ac2.Gain,7);
 %xx = min(ac2.Freq):0.001:max(ac2.Freq);
 %yy = polyval(a,xx);
 %plot(xx,yy,'r')
 
 %%
-% ´´½¨ axes
+% åˆ›å»º axes
 axes1 = axes('Parent',figure1,...
     'Position',[0.106710334788938 0.108225108225108 0.775000000000001 0.831168831168831]);
 hold(axes1,'on');
 
-% Ê¹ÓÃ semilogx µÄ¾ØÕóÊäÈë´´½¨¶àĞĞ
+% ä½¿ç”¨ semilogx çš„çŸ©é˜µè¾“å…¥åˆ›å»ºå¤šè¡Œ
 semilogx1 = semilogx(ac2.Freq,ac2.Gain);
 semilogx2 = semilogx(freq/1000,Gain);
 set(semilogx1,'DisplayName','Measured data','Marker','+');
 set(semilogx2,'DisplayName','Theoretical data','Marker','x');
 
-% ´´½¨ ylabel
+% åˆ›å»º ylabel
 ylabel({'Gain(dB)',''});
 
-% ´´½¨ xlabel
+% åˆ›å»º xlabel
 xlabel('Frequency(KHz)');
 
-% ´´½¨ title
+% åˆ›å»º title
 title({'Figure 1:Gain against Frequency in serise LCR cricuit',''});
 
-% ÉèÖÃY ·¶Î§
+% è®¾ç½®Y èŒƒå›´
 ylim(axes1,[-40 0]);
 box(axes1,'on');
 
-% ÉèÖÃÆäÓà×ø±êÇøÊôĞÔ
+% è®¾ç½®å…¶ä½™åæ ‡åŒºå±æ€§
 set(axes1,'XMinorTick','on','XScale','log','YTick',...
     [-40 -35 -30 -25 -20 -15 -10 -5 0],'YTickLabel',...
     {'-40','-35','-30','-25','-20','-15','-10','-5','0'});
 
-% ´´½¨ legend
+% åˆ›å»º legend
 legend1 = legend(axes1,'show');
 set(legend1,...
     'Position',[0.107738099708443 0.856746034016687 0.246428566798568 0.0869047596341086]);
